@@ -2,18 +2,9 @@
   "$schema": "https://modelcontextprotocol.io/schema/mcp-config.json",
   "mcpServers": {
     "diagnostics": {
-      "command": "node",
-      "args": ["d:\\MCP Development\\Diagnostics MCP\\dist\\extension.js"],
-      "transport": "stdio",
-      "description": "VS Code diagnostics (errors, warnings) detection in real-time",
-      "capabilities": {
-        "tools": true
-      },
-      "metadata": {
-        "version": "1.0.0",
-        "author": "Diagnostics MCP Server",
-        "repository": "local"
-      }
+      "type": "http",
+      "url": "http://127.0.0.1:3846/mcp",
+      "description": "VS Code diagnostics - all 5 tools (errors, warnings, info, health, all diagnostics)"
     }
   },
   "examples": {
@@ -24,26 +15,19 @@
     },
     "get_errors_only": {
       "description": "Get only error-level diagnostics",
-      "tool": "get_diagnostics_by_severity",
+      "tool": "get_errors",
+      "arguments": {}
+    },
+    "get_file_errors": {
+      "description": "Get error-level diagnostics for a specific file",
+      "tool": "get_errors",
       "arguments": {
-        "severity": "error"
+        "filePath": "src/extension.ts"
       }
     },
     "check_health": {
       "description": "Get workspace health score (0-100)",
       "tool": "get_workspace_health",
-      "arguments": {}
-    },
-    "get_file_problems": {
-      "description": "Get problems for specific file",
-      "tool": "get_file_diagnostics",
-      "arguments": {
-        "filePath": "C:\\path\\to\\your\\file.ts"
-      }
-    },
-    "summary": {
-      "description": "Get summary count by severity",
-      "tool": "get_diagnostics_summary",
       "arguments": {}
     }
   }

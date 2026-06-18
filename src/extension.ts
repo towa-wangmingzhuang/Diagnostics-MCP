@@ -268,22 +268,27 @@ function createMCPServer(): Server {
     const toolName = request.params.name;
     outputChannel.appendLine(`Executing tool: ${toolName}`);
 
+    const filePath = getOptionalFilePathFromArguments(request.params.arguments);
     let toolResult: any;
 
     if (toolName === "get_all_diagnostics") {
-      toolResult = getAllDiagnostics();
+      toolResult = getAllDiagnostics(filePath);
     } else if (toolName === "get_workspace_health") {
-      toolResult = getWorkspaceHealth();
+      toolResult = getWorkspaceHealth(filePath);
     } else if (toolName === "get_errors") {
       toolResult = getDiagnosticsBySeverity(
         vscode.DiagnosticSeverity.Error,
-        getOptionalFilePathFromArguments(request.params.arguments)
+        filePath
       );
     } else if (toolName === "get_warnings") {
-      toolResult = getDiagnosticsBySeverity(vscode.DiagnosticSeverity.Warning);
+      toolResult = getDiagnosticsBySeverity(
+        vscode.DiagnosticSeverity.Warning,
+        filePath
+      );
     } else if (toolName === "get_info") {
       toolResult = getDiagnosticsBySeverity(
-        vscode.DiagnosticSeverity.Information
+        vscode.DiagnosticSeverity.Information,
+        filePath
       );
     } else {
       throw new Error(`Unknown tool: ${toolName}`);
@@ -303,21 +308,31 @@ function createMCPServer(): Server {
 }
 
 function getMCPTools() {
+  const filePathProperty = {
+    filePath: {
+      type: "string",
+      description:
+        "Optional absolute or workspace-relative file path to scope the query to a single file",
+    },
+  };
+
   return [
     {
       name: "get_all_diagnostics",
-      description: "Get all diagnostics from the workspace",
+      description:
+        "Get all diagnostics from the workspace or a specific file",
       inputSchema: {
         type: "object",
-        properties: {},
+        properties: filePathProperty,
       },
     },
     {
       name: "get_workspace_health",
-      description: "Get workspace health score based on diagnostics",
+      description:
+        "Get workspace health score based on diagnostics, optionally scoped to a single file",
       inputSchema: {
         type: "object",
-        properties: {},
+        properties: filePathProperty,
       },
     },
     {
@@ -326,41 +341,42 @@ function getMCPTools() {
         "Get error-level diagnostics from the workspace or a specific file",
       inputSchema: {
         type: "object",
-        properties: {
-          filePath: {
-            type: "string",
-            description:
-              "Optional absolute or workspace-relative file path to check",
-          },
-        },
+        properties: filePathProperty,
       },
     },
     {
       name: "get_warnings",
-      description: "Get only warning-level diagnostics from the workspace",
+      description:
+        "Get warning-level diagnostics from the workspace or a specific file",
       inputSchema: {
         type: "object",
-        properties: {},
+        properties: filePathProperty,
       },
     },
     {
       name: "get_info",
-      description: "Get only info-level diagnostics from the workspace",
+      description:
+        "Get info-level diagnostics from the workspace or a specific file",
       inputSchema: {
         type: "object",
-        properties: {},
+        properties: filePathProperty,
       },
     },
   ];
 }
 
-function getAllDiagnostics() {
+function getAllDiagnostics(filePath?: string) {
   try {
     const diagnostics = vscode.languages.getDiagnostics();
+    const targetUri = filePath ? resolveInputFileUri(filePath) : undefined;
     let totalDiagnostics = 0;
     const diagnosticsList: any[] = [];
 
     for (const [uri, fileDiagnostics] of diagnostics) {
+      if (targetUri && !isEqualUri(uri, targetUri)) {
+        continue;
+      }
+
       totalDiagnostics += fileDiagnostics.length;
       for (const diagnostic of fileDiagnostics) {
         diagnosticsList.push({
@@ -380,6 +396,7 @@ function getAllDiagnostics() {
     }
 
     return {
+      ...(targetUri ? { file: targetUri.fsPath } : {}),
       total: totalDiagnostics,
       diagnostics: diagnosticsList,
       status: totalDiagnostics > 0 ? "found" : "empty",
@@ -388,6 +405,7 @@ function getAllDiagnostics() {
   } catch (error) {
     outputChannel.appendLine(`Error getting diagnostics: ${error}`);
     return {
+      ...(filePath ? { file: filePath } : {}),
       total: 0,
       diagnostics: [],
       status: "error",
@@ -397,14 +415,19 @@ function getAllDiagnostics() {
   }
 }
 
-function getWorkspaceHealth() {
+function getWorkspaceHealth(filePath?: string) {
   try {
     const diagnostics = vscode.languages.getDiagnostics();
+    const targetUri = filePath ? resolveInputFileUri(filePath) : undefined;
     let errors = 0;
     let warnings = 0;
     let infos = 0;
 
-    for (const [, fileDiagnostics] of diagnostics) {
+    for (const [uri, fileDiagnostics] of diagnostics) {
+      if (targetUri && !isEqualUri(uri, targetUri)) {
+        continue;
+      }
+
       for (const diagnostic of fileDiagnostics) {
         if (diagnostic.severity === 0) errors++;
         else if (diagnostic.severity === 1) warnings++;
@@ -422,6 +445,7 @@ function getWorkspaceHealth() {
     );
 
     return {
+      ...(targetUri ? { file: targetUri.fsPath } : {}),
       healthScore: Math.round(healthScore),
       status:
         healthScore >= 90
@@ -437,6 +461,7 @@ function getWorkspaceHealth() {
   } catch (error) {
     outputChannel.appendLine(`Error calculating workspace health: ${error}`);
     return {
+      ...(filePath ? { file: filePath } : {}),
       healthScore: 0,
       status: "error",
       summary: { errors: 0, warnings: 0, infos: 0, total: 0 },

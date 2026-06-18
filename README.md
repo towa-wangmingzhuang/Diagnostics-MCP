@@ -185,12 +185,23 @@ Get complete diagnostic information from workspace.
 
 ### 2. Tool: `get_errors`
 
-Get only error-level diagnostics.
+Get only error-level diagnostics. Pass `filePath` to check a single file only.
+
+**Arguments:**
+
+```json
+{
+  "filePath": "src/extension.ts"
+}
+```
+
+`filePath` is optional and can be absolute or workspace-relative. If omitted, the tool checks the whole workspace.
 
 **Returns:**
 
 ```json
 {
+  "file": "C:\\path\\to\\file.ts",
   "count": 5,
   "diagnostics": [...],
   "severityLevel": "errors",

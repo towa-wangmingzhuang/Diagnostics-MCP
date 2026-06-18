@@ -9,13 +9,9 @@
  *           or: node index.js
  */
 
-import { spawn } from "child_process";
-import { fileURLToPath } from "url";
-import { dirname, resolve } from "path";
-import { existsSync } from "fs";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const { spawn } = require("child_process");
+const { resolve } = require("path");
+const { existsSync } = require("fs");
 
 console.error("╔═══════════════════════════════════════════════════════╗");
 console.error("║   DIAGNOSTICS MCP SERVER - FULL VS CODE INTEGRATION   ║");
@@ -27,15 +23,19 @@ console.error("");
 
 // Find VS Code executable
 function findVSCode() {
-  const platform = process.platform;
+  return process.platform === "win32" ? "code.cmd" : "code";
+}
 
-  if (platform === "win32") {
-    return "code.cmd";
-  } else if (platform === "darwin") {
-    return "code";
-  } else {
-    return "code";
+function findNpm() {
+  return process.platform === "win32" ? "npm.cmd" : "npm";
+}
+
+function spawnCommand(command, args, options) {
+  if (process.platform === "win32" && command.endsWith(".cmd")) {
+    return spawn("cmd.exe", ["/d", "/s", "/c", command, ...args], options);
   }
+
+  return spawn(command, args, options);
 }
 
 // Check if extension is compiled
@@ -49,10 +49,9 @@ async function compileExtension() {
   console.error("🔨 Compiling TypeScript extension...");
 
   return new Promise((resolve, reject) => {
-    const tsc = spawn("npm", ["run", "compile"], {
+    const tsc = spawnCommand(findNpm(), ["run", "compile"], {
       cwd: __dirname,
       stdio: ["inherit", "inherit", "inherit"],
-      shell: true,
     });
 
     tsc.on("close", (code) => {
@@ -93,12 +92,11 @@ async function launchMCPServer() {
     console.error("🚀 Launching VS Code with MCP Server...\n");
 
     // Launch VS Code extension
-    const vscodeProcess = spawn(
+    const vscodeProcess = spawnCommand(
       vscode,
       [workspace, `--extensionDevelopmentPath=${extensionPath}`],
       {
         stdio: "inherit",
-        shell: true,
       }
     );
 
@@ -157,9 +155,9 @@ if (process.argv.includes("--help") || process.argv.includes("-h")) {
   console.error("");
   console.error("MCP Tools Available:");
   console.error("  - get_all_diagnostics");
-  console.error("  - get_file_diagnostics");
-  console.error("  - get_diagnostics_by_severity");
-  console.error("  - get_diagnostics_summary");
+  console.error("  - get_errors");
+  console.error("  - get_warnings");
+  console.error("  - get_info");
   console.error("  - get_workspace_health");
   console.error("");
   process.exit(0);

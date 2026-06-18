@@ -250,7 +250,7 @@ export function deactivate() {
 function createMCPServer(): Server {
   const server = new Server(
     {
-      name: "diagnostics-mcp-server",
+      name: "vscode-diagnostics-mcp",
       version: "0.1.0",
     },
     {

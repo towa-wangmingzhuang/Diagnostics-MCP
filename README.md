@@ -1,4 +1,4 @@
-# Diagnostics MCP Server
+# VS Code Diagnostics MCP
 
 > **HTTP MCP server with 5 diagnostic tools providing real-time access to ALL VS Code diagnostics (TypeScript, ESLint, Prettier, and all installed extensions)**
 
@@ -57,10 +57,8 @@ Install from VS Code Marketplace:
 
 1. Open VS Code
 2. Go to Extensions (Ctrl+Shift+X)
-3. Search for "Diagnostics MCP Server"
+3. Search for "VS Code Diagnostics MCP"
 4. Click Install
-
-**Latest Version: 1.0.12** - Complete HTTP MCP implementation with 5 diagnostic tools, enhanced error handling, and working commands
 
 ### Step 2: Extension Auto-Start
 

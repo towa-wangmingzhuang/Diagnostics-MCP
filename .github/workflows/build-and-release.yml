@@ -36,7 +36,7 @@ jobs:
         run: |
           VERSION=$(node -p "require('./package.json').version")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "VSIX file will be: diagnostics-mcp-server-$VERSION.vsix"
+          echo "VSIX file will be: vscode-diagnostics-mcp-$VERSION.vsix"
 
       - name: Delete previous releases
         env:
@@ -57,11 +57,11 @@ jobs:
         run: |
           VERSION="${{ steps.package-version.outputs.version }}"
           TAG="v$VERSION"
-          VSIX_FILE="diagnostics-mcp-server-$VERSION.vsix"
+          VSIX_FILE="vscode-diagnostics-mcp-$VERSION.vsix"
 
           # Create release notes
           cat > release-notes.md << 'EOF'
-          ## Diagnostics MCP Server v${{ steps.package-version.outputs.version }}
+          ## VS Code Diagnostics MCP v${{ steps.package-version.outputs.version }}
 
           ### 🚀 Features
           - HTTP MCP server on port 3846
@@ -73,11 +73,11 @@ jobs:
           ### 📦 Installation
           **Option 1: Download from this release**
           1. Download the VSIX file below
-          2. Install: `code --install-extension diagnostics-mcp-server-${{ steps.package-version.outputs.version }}.vsix --force`
+          2. Install: `code --install-extension vscode-diagnostics-mcp-${{ steps.package-version.outputs.version }}.vsix --force`
 
           **Option 2: VS Code Marketplace**
           1. Open VS Code → Extensions (Ctrl+Shift+X)
-          2. Search for "Diagnostics MCP Server"
+          2. Search for "VS Code Diagnostics MCP"
           3. Click Install
 
           ### 🔗 MCP Configuration
@@ -104,12 +104,12 @@ jobs:
           # Create release with VSIX file
           gh release create "$TAG" \
             "$VSIX_FILE" \
-            --title "Diagnostics MCP Server v$VERSION" \
+            --title "VS Code Diagnostics MCP v$VERSION" \
             --notes-file release-notes.md
 
       - name: Upload VSIX as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: diagnostics-mcp-server-${{ steps.package-version.outputs.version }}
-          path: diagnostics-mcp-server-${{ steps.package-version.outputs.version }}.vsix
+          name: vscode-diagnostics-mcp-${{ steps.package-version.outputs.version }}
+          path: vscode-diagnostics-mcp-${{ steps.package-version.outputs.version }}.vsix
           retention-days: 90

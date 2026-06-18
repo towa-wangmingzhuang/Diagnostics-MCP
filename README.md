@@ -3,7 +3,9 @@
 > **HTTP MCP server with 5 diagnostic tools providing real-time access to ALL VS Code diagnostics (TypeScript, ESLint, Prettier, and all installed extensions)**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.0.15-blue.svg)](https://github.com/Maaz0313-png/Diagnostics-MCP)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/towa-wangmingzhuang/Diagnostics-MCP)
+
+> Maintained fork of [Maaz0313-png/Diagnostics-MCP](https://github.com/Maaz0313-png/Diagnostics-MCP) — published under the `wangmz` publisher on the VS Code Marketplace.
 
 ## 🎯 Overview
 
@@ -141,7 +143,7 @@ This extension uses an **HTTP MCP Server** architecture:
 ### Build from Source
 
 ```bash
-git clone https://github.com/Maaz0313-png/Diagnostics-MCP.git
+git clone https://github.com/towa-wangmingzhuang/Diagnostics-MCP.git
 cd "Diagnostics MCP"
 npm install
 npm run compile
@@ -303,7 +305,8 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ## 🔗 Links
 
-- [GitHub Repository](https://github.com/Maaz0313-png/Diagnostics-MCP)
+- [GitHub Repository](https://github.com/towa-wangmingzhuang/Diagnostics-MCP)
+- [Upstream project](https://github.com/Maaz0313-png/Diagnostics-MCP)
 - [Model Context Protocol](https://modelcontextprotocol.io)
 
 ## ⚠️ Troubleshooting
@@ -371,4 +374,4 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ---
 
-**Made with ❤️ by Maaz Tajammul**
+**Originally created by Maaz Tajammul. This fork maintained by Wang Mingzhuang.**

@@ -2,9 +2,9 @@
   "name": "diagnostics-mcp-server",
   "displayName": "Diagnostics MCP Server",
   "description": "Exposes VS Code diagnostics (errors, warnings, info from TypeScript, ESLint, Prettier, all extensions) to AI agents via HTTP MCP protocol. Auto-starts on port 3846, provides real-time diagnostic access, workspace health scoring, and severity-based filtering. No configuration needed - just install and connect your MCP client to http://127.0.0.1:3846/mcp",
-  "version": "1.0.15",
-  "publisher": "maaz-tajammul",
-  "author": "Maaz Tajammul",
+  "version": "0.1.0",
+  "publisher": "wangmz",
+  "author": "Wang Mingzhuang",
   "license": "MIT",
   "main": "./dist/extension.js",
   "engines": {
@@ -25,16 +25,16 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Maaz0313-png/Diagnostics-MCP"
+    "url": "https://github.com/towa-wangmingzhuang/Diagnostics-MCP"
   },
   "categories": [
     "Other"
   ],
-  "homepage": "https://github.com/Maaz0313-png/Diagnostics-MCP#readme",
+  "homepage": "https://github.com/towa-wangmingzhuang/Diagnostics-MCP#readme",
   "bugs": {
-    "url": "https://github.com/Maaz0313-png/Diagnostics-MCP/issues"
+    "url": "https://github.com/towa-wangmingzhuang/Diagnostics-MCP/issues"
   },
-  "qna": "https://github.com/Maaz0313-png/Diagnostics-MCP/discussions",
+  "qna": "https://github.com/towa-wangmingzhuang/Diagnostics-MCP/discussions",
   "icon": "icon.png",
   "galleryBanner": {
     "color": "#1e1e1e",

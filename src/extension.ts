@@ -251,7 +251,7 @@ function createMCPServer(): Server {
   const server = new Server(
     {
       name: "diagnostics-mcp-server",
-      version: "1.0.15",
+      version: "0.1.0",
     },
     {
       capabilities: {

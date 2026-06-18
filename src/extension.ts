@@ -13,11 +13,11 @@ let httpServer: http.Server | undefined;
 let serverPort: number = 3846;
 
 export function activate(context: vscode.ExtensionContext) {
-  outputChannel = vscode.window.createOutputChannel("Diagnostics MCP Server");
+  outputChannel = vscode.window.createOutputChannel("VS Code Diagnostics MCP");
   outputChannel.appendLine("✅ EXTENSION ACTIVATED!");
   outputChannel.show();
 
-  const config = vscode.workspace.getConfiguration("diagnostics-mcp-server");
+  const config = vscode.workspace.getConfiguration("vscode-diagnostics-mcp");
   const autoStart = config.get<boolean>("autoStart", true);
   serverPort = config.get<number>("port", 3846);
 
@@ -34,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
   }
 
   const startCommand = vscode.commands.registerCommand(
-    "diagnostics-mcp.start",
+    "vscode-diagnostics-mcp.start",
     () => {
       if (!httpServer || !httpServer.listening) {
         startHttpServer();
@@ -54,7 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const stopCommand = vscode.commands.registerCommand(
-    "diagnostics-mcp.stop",
+    "vscode-diagnostics-mcp.stop",
     () => {
       if (httpServer && httpServer.listening) {
         stopHttpServer();
@@ -68,7 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const statusCommand = vscode.commands.registerCommand(
-    "diagnostics-mcp.status",
+    "vscode-diagnostics-mcp.status",
     () => {
       const isRunning = httpServer && httpServer.listening;
       const status = isRunning ? "RUNNING" : "STOPPED";
@@ -94,7 +94,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const restartCommand = vscode.commands.registerCommand(
-    "diagnostics-mcp.restart",
+    "vscode-diagnostics-mcp.restart",
     () => {
       if (httpServer && httpServer.listening) {
         outputChannel.appendLine("🔄 Restarting HTTP MCP Server...");
@@ -127,8 +127,8 @@ export function activate(context: vscode.ExtensionContext) {
     restartCommand
   );
 
-  vscode.window.showInformationMessage("✅ Diagnostics MCP - ACTIVATED!");
-  console.log("✅ DIAGNOSTICS MCP: ACTIVATED");
+  vscode.window.showInformationMessage("✅ VS Code Diagnostics MCP - ACTIVATED!");
+  console.log("✅ VS CODE DIAGNOSTICS MCP: ACTIVATED");
 }
 
 function startHttpServer() {
@@ -223,11 +223,22 @@ function startHttpServer() {
     );
     outputChannel.appendLine(`   - MCP: http://localhost:${serverPort}/mcp`);
     vscode.window.showInformationMessage(
-      `🚀 Diagnostics MCP Server running on http://localhost:${serverPort}`
+      `🚀 VS Code Diagnostics MCP running on http://localhost:${serverPort}`
     );
   });
 
-  httpServer.on("error", (error) => {
+  httpServer.on("error", (error: Error & { code?: string }) => {
+    httpServer = undefined;
+    if (error.code === "EADDRINUSE") {
+      outputChannel.appendLine(
+        `⚠️ Port ${serverPort} is already in use. Another extension or process is likely listening on the same port. ` +
+          `Change "vscode-diagnostics-mcp.port" in settings, or stop the conflicting process, then run "VS Code Diagnostics MCP: Restart HTTP MCP Server".`
+      );
+      vscode.window.showWarningMessage(
+        `VS Code Diagnostics MCP: port ${serverPort} is in use — server not started. Change the port in settings or stop the conflicting process.`
+      );
+      return;
+    }
     outputChannel.appendLine(`❌ HTTP Server error: ${error.message}`);
     vscode.window.showErrorMessage(`HTTP Server error: ${error.message}`);
   });
@@ -244,14 +255,14 @@ function stopHttpServer() {
 
 export function deactivate() {
   stopHttpServer();
-  console.log("👋 DIAGNOSTICS MCP: DEACTIVATED");
+  console.log("👋 VS CODE DIAGNOSTICS MCP: DEACTIVATED");
 }
 
 function createMCPServer(): Server {
   const server = new Server(
     {
       name: "vscode-diagnostics-mcp",
-      version: "0.1.0",
+      version: "0.1.1",
     },
     {
       capabilities: {

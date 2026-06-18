@@ -2,7 +2,7 @@
   "name": "vscode-diagnostics-mcp",
   "displayName": "VS Code Diagnostics MCP",
   "description": "Exposes VS Code diagnostics (errors, warnings, info from TypeScript, ESLint, Prettier, all extensions) to AI agents via HTTP MCP protocol. Auto-starts on port 3846, provides real-time diagnostic access, workspace health scoring, and severity-based filtering. No configuration needed - just install and connect your MCP client to http://127.0.0.1:3846/mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "wangmz",
   "author": "Wang Mingzhuang",
   "license": "MIT",
@@ -46,35 +46,35 @@
   "contributes": {
     "commands": [
       {
-        "command": "diagnostics-mcp.start",
+        "command": "vscode-diagnostics-mcp.start",
         "title": "🚀 Start HTTP MCP Server (Port 3846)",
-        "category": "Diagnostics MCP"
+        "category": "VS Code Diagnostics MCP"
       },
       {
-        "command": "diagnostics-mcp.stop",
+        "command": "vscode-diagnostics-mcp.stop",
         "title": "🛑 Stop HTTP MCP Server",
-        "category": "Diagnostics MCP"
+        "category": "VS Code Diagnostics MCP"
       },
       {
-        "command": "diagnostics-mcp.status",
+        "command": "vscode-diagnostics-mcp.status",
         "title": "📊 MCP Server Status (5 Tools + Health)",
-        "category": "Diagnostics MCP"
+        "category": "VS Code Diagnostics MCP"
       },
       {
-        "command": "diagnostics-mcp.restart",
+        "command": "vscode-diagnostics-mcp.restart",
         "title": "🔄 Restart HTTP MCP Server",
-        "category": "Diagnostics MCP"
+        "category": "VS Code Diagnostics MCP"
       }
     ],
     "configuration": {
-      "title": "Diagnostics MCP Server",
+      "title": "VS Code Diagnostics MCP",
       "properties": {
-        "diagnostics-mcp-server.autoStart": {
+        "vscode-diagnostics-mcp.autoStart": {
           "type": "boolean",
           "default": true,
           "description": "Automatically start HTTP MCP server when VS Code opens"
         },
-        "diagnostics-mcp-server.port": {
+        "vscode-diagnostics-mcp.port": {
           "type": "number",
           "default": 3846,
           "description": "Port for HTTP MCP server (default: 3846)"

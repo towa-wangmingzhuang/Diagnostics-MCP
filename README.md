@@ -3,7 +3,7 @@
 > **HTTP MCP server with 5 diagnostic tools providing real-time access to ALL VS Code diagnostics (TypeScript, ESLint, Prettier, and all installed extensions)**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/towa-wangmingzhuang/Diagnostics-MCP)
+[![Version](https://img.shields.io/badge/version-0.1.1-blue.svg)](https://github.com/towa-wangmingzhuang/Diagnostics-MCP)
 
 > Maintained fork of [Maaz0313-png/Diagnostics-MCP](https://github.com/Maaz0313-png/Diagnostics-MCP) — published under the `wangmz` publisher on the VS Code Marketplace.
 
@@ -22,7 +22,7 @@ This Model Context Protocol (MCP) server provides AI agents with real-time acces
 
 The extension provides two configuration settings:
 
-### `diagnostics-mcp-server.autoStart`
+### `vscode-diagnostics-mcp.autoStart`
 
 - **Type**: `boolean`
 - **Default**: `true`
@@ -31,11 +31,11 @@ The extension provides two configuration settings:
 **To disable auto-start:**
 
 1. Open VS Code Settings (Ctrl+,)
-2. Search for "diagnostics-mcp-server"
+2. Search for "vscode-diagnostics-mcp"
 3. Uncheck "Auto Start"
 4. Use the "Start HTTP MCP Server" command to start manually
 
-### `diagnostics-mcp-server.port`
+### `vscode-diagnostics-mcp.port`
 
 - **Type**: `number`
 - **Default**: `3846`
@@ -44,7 +44,7 @@ The extension provides two configuration settings:
 **To change the port:**
 
 1. Open VS Code Settings (Ctrl+,)
-2. Search for "diagnostics-mcp-server.port"
+2. Search for "vscode-diagnostics-mcp.port"
 3. Set your desired port number
 4. Restart the server or reload VS Code
 5. Update your MCP client configuration with the new port
@@ -89,7 +89,7 @@ Add this to your MCP client configuration (e.g., Claude Desktop config or VS Cod
 ### Verify Connection
 
 1. **Check server status**: Visit `http://127.0.0.1:3846/health`
-2. **View logs**: VS Code Output panel → "Diagnostics MCP Server"
+2. **View logs**: VS Code Output panel → "VS Code Diagnostics MCP"
 3. **Test connection**: Server automatically starts when VS Code opens
 
 **Available immediately after VS Code extension installation - no additional setup required!**
@@ -312,14 +312,14 @@ MIT License - see [LICENSE](LICENSE) file for details
 ### "MCP server not connecting"
 
 1. Check server status: Visit `http://127.0.0.1:3846/health`
-2. View logs: VS Code Output panel → "Diagnostics MCP Server"
+2. View logs: VS Code Output panel → "VS Code Diagnostics MCP"
 3. Restart server: Use command "Diagnostics MCP: Start HTTP MCP Server"
 4. Reload VS Code window: Ctrl+Shift+P → "Reload Window"
 
 ### "Port 3846 already in use"
 
 1. Stop other applications using port 3846
-2. Or change port in VS Code settings: `diagnostics-mcp-server.port`
+2. Or change port in VS Code settings: `vscode-diagnostics-mcp.port`
 3. Use "Restart HTTP MCP Server" command or reload VS Code
 4. Update your MCP client config with the new port
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Diagnostics MCP Server Launcher
+ * VS Code Diagnostics MCP Launcher
  * Launches VS Code extension to access ALL diagnostics
  * (TypeScript, ESLint, Prettier, and all installed extensions)
  *

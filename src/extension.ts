@@ -262,7 +262,7 @@ function createMCPServer(): Server {
   const server = new Server(
     {
       name: "vscode-diagnostics-mcp",
-      version: "0.1.1",
+      version: "0.1.2",
     },
     {
       capabilities: {
